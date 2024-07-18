@@ -5,7 +5,7 @@ app:
   config:
     keycloak:
       url: http://localhost:8571/
-      realm: yourBank-service
+      realm: yourbank-service
 
 eureka:
   client:
@@ -15,9 +15,12 @@ eureka:
 spring:
   application:
     name: api-gateway
-
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
       routes:
         - id: user-service
           uri: lb://user-service
@@ -48,7 +51,6 @@ spring:
           uri: lb://fund-transfer-service
           predicates:
             - Path=/fund-transfers/**
-
   security:
     oauth2:
       client:
@@ -61,10 +63,10 @@ spring:
             jwk-set-uri: ${app.config.keycloak.url}/realms/${app.config.keycloak.realm}/protocol/openid-connect/certs
             user-info-authentication-method: header
         registration:
-          yourBank-service-client:
+          yourbank-service-client:
             provider: keycloak
-            client-id: yourBank-service-client
-            client-secret: Kqb5pOtnIhrKZeLGBD7IlKtSlsRMTjn3
+            client-id: yourbank-service-client
+            client-secret: g5WvXJgctxX3DM1vztGLm8hoa2CAPWb1
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8571/login/oauth2/code/keycloak
             scope: openid
